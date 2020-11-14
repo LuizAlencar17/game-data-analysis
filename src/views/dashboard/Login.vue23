@@ -1,0 +1,82 @@
+<template>
+
+<div class="conteudo">
+    <v-form
+      class="loginScreen"
+      ref="form"
+      v-model="valid"
+      lazy-validation
+    >
+      <v-text-field
+        v-model="login"
+        :counter="20"
+        :rules="loginRules"
+        label="login"
+        required
+      ></v-text-field>
+
+      <v-text-field
+        v-model="password"
+        :rules="passwordRules"
+        label="password"
+        required
+      ></v-text-field>
+
+      <v-btn
+        :disabled="!valid"
+        color="green"
+        class="mr-4"
+        @click="validate"
+      >
+        Log in
+      </v-btn>
+
+    </v-form>
+</div>
+</template>
+
+<script>
+  export default {
+    data: () => ({
+      valid: true,
+      login: '',
+      loginRules: [
+        v => !!v || 'Informe seu login',
+        v => (v && v.length <= 20) || 'login invalido',
+      ],
+      password: '',
+      passwordRules: [
+        v => !!v || 'Informe sua password',
+        v => (v && v.length >= 5) || 'password Invalido',
+      ],
+    }),
+    methods: {
+      validate () {
+        if (this.$refs.form.validate()) {
+          this.snackbar = true
+          var users = {}
+          for (var i = 0; i < users.length; i++) {
+            if (users[i].userlogin === this.login && this.password === users[i].password) {
+              this.$store.state.login_user = this.login
+              localStorage.setItem('loginDeuser', this.login)
+              this.$router.push('products')
+              break
+            }
+          }
+        }
+      },
+    },
+  }
+</script>
+
+<style>
+.loginScreen{
+  margin: 80px;
+  margin-left: 30%;
+  margin-right: 30%;
+}
+.logo{
+  margin-top: 5%;
+  text-align: center;
+}
+</style>
